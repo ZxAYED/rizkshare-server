@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // const axios = require('axios');
 const express=require('express')
 const cors=require('cors')
@@ -7,7 +7,10 @@ const app =express()
 const port =process.env.PORT || 5000
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin:['http://localhost:5173','http://localhost:5174'],
+    credentials:true,
+}))
 
 
 
@@ -29,13 +32,33 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
 const availableFoods= client.db('rizkShare').collection('foods')
+const requestedFoods= client.db('rizkShare').collection('requestedFoods')
 
-app.get('/rizkShare/availableFoods',async(req,res)=>{
+app.get('/RizkShare/availableFoods',async(req,res)=>{
 
     const result =await availableFoods.find().toArray()
     res.send(result)
 
 })
+app.get('/RizkShare/:id',async(req,res)=>{
+    const id=req.params.id
+    const query={_id: new ObjectId(id) }
+
+    const result =await availableFoods.findOne(query)
+    
+    res.send(result) 
+
+})
+app.post('/RizkShare/RequestedFood',async(req,res)=>{
+const cursor =req.body
+
+   const result =await requestedFoods.insertOne(cursor)
+    
+    res.send(result) 
+    console.log(result);
+
+})
+
 
 
 
