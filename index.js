@@ -49,7 +49,7 @@ app.post('/RizkShare/availableFoods',async(req,res)=>{
    res.send(result) 
    console.log(result);
 })
-app.get('/RizkShare/:id',async(req,res)=>{
+app.get('/RizkShare/SingleFood/:id',async(req,res)=>{
     const id=req.params.id
     const query={_id: new ObjectId(id) }
 
@@ -68,8 +68,17 @@ const cursor =req.body
 
 })
 app.get('/RizkShare/RequestedFood',async(req,res)=>{
+  console.log(req.query.email);
+  // console.log(req.cookies.token);
+  // console.log( 'user in the valid token',req.user);
+  let query = {};
+  if (req.query?.email) {
+    query = { email: req.query.email };
+  }
 
-  const result =await requestedFoods.find().toArray()
+  
+
+  const result =await requestedFoods.find(query).toArray()
   res.send(result)
 
 })
