@@ -40,6 +40,15 @@ app.get('/RizkShare/availableFoods',async(req,res)=>{
     res.send(result)
 
 })
+app.post('/RizkShare/availableFoods',async(req,res)=>{
+
+  const cursor =req.body
+
+  const result =await availableFoods.insertOne(cursor)
+   
+   res.send(result) 
+   console.log(result);
+})
 app.get('/RizkShare/:id',async(req,res)=>{
     const id=req.params.id
     const query={_id: new ObjectId(id) }
@@ -56,6 +65,12 @@ const cursor =req.body
     
     res.send(result) 
     console.log(result);
+
+})
+app.get('/RizkShare/RequestedFood',async(req,res)=>{
+
+  const result =await requestedFoods.find().toArray()
+  res.send(result)
 
 })
 
