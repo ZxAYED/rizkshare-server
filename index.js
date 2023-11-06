@@ -82,6 +82,21 @@ app.get('/RizkShare/RequestedFood',async(req,res)=>{
   res.send(result)
 
 })
+app.get('/RizkShare/ManageFoods',async(req,res)=>{
+ 
+  // console.log(req.cookies.token);
+  // console.log( 'user in the valid token',req.user);
+  let query = {};
+  if (req.query?.email) {
+    query = { email: req.query.email };
+  }
+
+  
+
+  const result =await requestedFoods.find(query).toArray()
+  res.send(result)
+
+})
 app.delete('/RizkShare/RequestedFood/:id',async(req,res)=>{
 const id  =req.params.id
 
