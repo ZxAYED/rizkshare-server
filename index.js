@@ -92,9 +92,15 @@ res.send(result)
 })
 app.patch('/RizkShare/RequestedFood/:id',async(req,res)=>{
 const data =req.body
-
-const query ={_id :new ObjectId(id)}
-const result =await  requestedFoods.deleteOne(query)
+const id =req.params.id
+// const query ={_id :new ObjectId(id)}
+const option ={upsert :true}
+const updatedDoc={
+  $set:{
+    status:data.status
+  }
+}
+const result =await  requestedFoods.updateOne(updatedDoc,option)
 res.send(result)
 
 })
