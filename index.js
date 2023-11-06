@@ -47,7 +47,7 @@ app.post('/RizkShare/availableFoods',async(req,res)=>{
   const result =await availableFoods.insertOne(cursor)
    
    res.send(result) 
-   console.log(result);
+  
 })
 app.get('/RizkShare/SingleFood/:id',async(req,res)=>{
     const id=req.params.id
@@ -64,7 +64,7 @@ const cursor =req.body
    const result =await requestedFoods.insertOne(cursor)
     
     res.send(result) 
-    console.log(result);
+
 
 })
 app.get('/RizkShare/RequestedFood',async(req,res)=>{
@@ -82,21 +82,10 @@ app.get('/RizkShare/RequestedFood',async(req,res)=>{
   res.send(result)
 
 })
-app.get('/RizkShare/ManageFoods',async(req,res)=>{
- 
-  // console.log(req.cookies.token);
-  // console.log( 'user in the valid token',req.user);
-  let query = {};
-  if (req.query?.email) {
-    query = { email: req.query.email };
-  }
+
 
   
 
-  const result =await requestedFoods.find(query).toArray()
-  res.send(result)
-
-})
 app.delete('/RizkShare/RequestedFood/:id',async(req,res)=>{
 const id  =req.params.id
 
@@ -108,20 +97,48 @@ res.send(result)
 app.patch('/RizkShare/RequestedFood/:id',async(req,res)=>{
 const data =req.body
 const id =req.params.id
-// const query ={_id :new ObjectId(id)}
+const query ={_id :new ObjectId(id)}
 const option ={upsert :true}
 const updatedDoc={
   $set:{
     status:data.status
   }
 }
-const result =await  requestedFoods.updateOne(updatedDoc,option)
+
+const result =await  requestedFoods.updateOne(updatedDoc,query,option)
 res.send(result)
 
 })
 
 
+app.get('/RizkShare/ManageFoods',async(req,res)=>{
+ 
+  // console.log(req.cookies.token);
+  // console.log( 'user in the valid token',req.user);
+  let query = {};
+  if (req.query?.email) {
+    query = { foodDonatorEmail: req.query.email };
+  }
 
+  
+
+  const result =await availableFoods.find(query).toArray()
+  res.send(result)
+
+})
+app.get('/RizkShare/ManageFoods/:id',async(req,res)=>{
+ 
+
+  // console.log(req.cookies.token);
+  // console.log( 'user in the valid token',req.user);
+  const id=req.params.id
+    const query={_id: new ObjectId(id) }
+
+    const result =await availableFoods.findOne(query)
+    
+    res.send(result) 
+
+})
 
 
 
