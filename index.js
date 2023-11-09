@@ -167,13 +167,28 @@ res.send(result)
 
 })
 app.patch('/RizkShare/availableFoods/:id',async(req,res)=>{
-const data =req.body
 const id =req.params.id
 const query ={_id :new ObjectId(id)}
 const option ={upsert :true}
-const update = { $set:data };
+const update=req.body
+const data = { $set:{
+  expiredDateInDays:update.expiredDateInDays
+  ,foodImage:update.foodImage
+  ,foodDonatorEmail:update.foodDonatorEmail
+  ,foodDonatorName:update.foodDonatorName
+  ,foodName:update.foodName
+  ,notes:update.notes
+  ,date:update.date
+  ,pickupLocation:update.pickupLocation
+  ,email:update.email
+  ,foodQuantity:update.foodQuantity
+  
+  ,    donation :update.donation
+  ,status:update.status
+}
+};
 
-const result =await  availableFoods.updateOne(query,update,option)
+const result =await  availableFoods.updateOne(query,data,option)
 res.send(result)
 
 })
